@@ -1,0 +1,53 @@
+<div class="max-w-6xl mx-auto p-6">
+  <!-- Heading -->
+  <h2 
+    *ngIf="userRole === 'admin' || userRole === 'agent'" 
+    class="text-3xl font-bold text-gray-800 mb-6 text-center"
+  >
+    All Payments
+  </h2>
+  <h2 
+    *ngIf="userRole !== 'admin' && userRole !== 'agent'" 
+    class="text-3xl font-bold text-gray-800 mb-6 text-center"
+  >
+    My Payments
+  </h2>
+
+  <!-- Empty State -->
+  <div *ngIf="payments.length === 0" class="text-center text-gray-600 bg-gray-100 py-6 rounded-lg">
+    <p>No payments found.</p>
+  </div>
+
+  <!-- Payments Grid -->
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div 
+      *ngFor="let payment of payments" 
+      class="bg-white shadow-md rounded-xl p-5 hover:shadow-lg transition"
+    >
+      <h3 class="text-lg font-semibold text-blue-700 mb-3">
+        {{ payment.policyTitle }}
+        <span class="text-gray-500 text-sm">({{ payment.policyCode }})</span>
+      </h3>
+
+      <ul class="text-sm text-gray-600 space-y-1">
+        <li><strong>Amount:</strong> ₹{{ payment.amount }}</li>
+        <li><strong>Method:</strong> {{ payment.method }}</li>
+        <li><strong>Reference:</strong> {{ payment.reference }}</li>
+        <li>
+          <strong>Status:</strong>
+          <span 
+            class="px-2 py-1 rounded-md text-xs font-medium"
+            [ngClass]="{
+              'bg-green-100 text-green-700': payment.status === 'SUCCESS',
+              'bg-yellow-100 text-yellow-700': payment.status === 'PENDING',
+              'bg-red-100 text-red-700': payment.status === 'FAILED'
+            }"
+          >
+            {{ payment.status }}
+          </span>
+        </li>
+        <li><strong>Date:</strong> {{ payment.createdAt | date: 'medium' }}</li>
+      </ul>
+    </div>
+  </div>
+</div>
